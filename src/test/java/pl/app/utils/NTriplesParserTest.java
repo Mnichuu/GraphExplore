@@ -39,7 +39,7 @@ class NTriplesParserTest {
     }
 
     @Test
-    void metadane_grafPowinienByćSkierowany() {
+    void metadane_grafPowinienBycSkierowany() {
         GraphMetadata meta = parse();
         assertTrue(meta.isDirected());
     }
