@@ -14,7 +14,6 @@ import java.util.Map;
 
 /**
  * Centralny magazyn grafu w pamięci.
- *
  * Trzyma dwie równoległe struktury:
  *  - mapy atrybutów (Node, Edge) — do serializacji i wyświetlania
  *  - graf JGraphT                — do zapytań strukturalnych (sąsiedztwo, algorytmy)

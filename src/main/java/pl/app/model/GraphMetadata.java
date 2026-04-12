@@ -2,8 +2,8 @@ package pl.app.model;
 
 public class GraphMetadata {
     private String id;
-    private int nodesCount;
-    private int edgesCount;
+    private long nodesCount;
+    private long edgesCount;
     private boolean directed;
     private String label;
 
@@ -23,19 +23,19 @@ public class GraphMetadata {
         this.id = id;
     }
 
-    public int getNodesCount() {
+    public long getNodeCount() {
         return nodesCount;
     }
 
-    public void setNodesCount(int nodesCount) {
+    public void setNodeCount(long nodesCount) {
         this.nodesCount = nodesCount;
     }
 
-    public int getEdgesCount() {
+    public long getEdgeCount() {
         return edgesCount;
     }
 
-    public void setEdgesCount(int edgesCount) {
+    public void setEdgeCount(long edgesCount) {
         this.edgesCount = edgesCount;
     }
 
