@@ -122,7 +122,7 @@ export class GraphRenderer {
     const layoutOpts = { name, ...defaults, ...options };
 
     // fCoSE nie jest dostępny — fallback do cose
-    if (name === 'fcose' && !this.#cy.layoutRegistered('fcose')) {
+    if (name === 'fcose') {
       layoutOpts.name = 'cose';
     }
 

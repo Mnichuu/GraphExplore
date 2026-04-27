@@ -297,6 +297,8 @@
 <script type="module" src="js/graph-renderer.js"></script>
 <script type="module" src="js/viewport-manager.js"></script>
 <script type="module" src="js/app.js"></script>
-
+<script>
+  window.APP_CONTEXT = '${pageContext.request.contextPath}';
+</script>
 </body>
 </html>

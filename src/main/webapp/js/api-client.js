@@ -1,4 +1,4 @@
-const BASE = '';   // ten sam origin co serwlet Tomcat
+const BASE = window.APP_CONTEXT ?? '';   // ten sam origin co serwlet Tomcat
 
 export class ApiClient {
 
