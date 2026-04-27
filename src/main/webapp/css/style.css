@@ -1,5 +1,5 @@
 :root {
-  --bg-base:      #080a0d;
+  --bg-base: #080d0d;
   --bg-surface:   #0e1117;
   --bg-elevated:  #141820;
   --bg-hover:     #1c2230;
@@ -33,6 +33,30 @@
   --radius-lg: 12px;
 
   --transition: 180ms ease;
+}
+
+body.light {
+  --bg-base:      #f5f7fa;
+  --bg-surface:   #ffffff;
+  --bg-elevated:  #f0f3f7;
+  --bg-hover:     #e4e9f0;
+  --bg-active:    #dbe3ec;
+
+  --border:       rgba(0,0,0,0.08);
+  --border-mid:   rgba(0,0,0,0.15);
+  --border-hi:    rgba(0,0,0,0.25);
+
+  --accent:       #007acc;
+  --accent-dim:   rgba(0, 122, 204, 0.12);
+  --accent-glow:  rgba(0, 122, 204, 0.25);
+  --accent-warn:  #d9822b;
+  --accent-ok:    #2ea043;
+  --accent-err:   #d73a49;
+
+  --text-primary:   #1a1f26;
+  --text-secondary: #4a5568;
+  --text-muted:     #8a94a6;
+  --text-accent:    #007acc;
 }
 
 /* == Reset =================================─ */
@@ -394,7 +418,7 @@ body {
   width: 100%;
   padding: 8px;
   background: var(--accent);
-  color: #000;
+  color: var(--bg-base);
   border: none;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
@@ -570,6 +594,10 @@ body {
 }
 
 /* == Minimap ================================= */
+body.light .minimap-wrap {
+  background: rgba(255,255,255,0.9);
+}
+
 .minimap-wrap {
   position: absolute;
   bottom: 48px;
@@ -626,6 +654,10 @@ body {
 }
 
 /* == Status bar ======================================== */
+body.light .status-bar {
+  background: rgba(255,255,255,0.9);
+}
+
 .status-bar {
   position: absolute;
   bottom: 0;

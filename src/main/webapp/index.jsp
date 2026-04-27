@@ -32,6 +32,13 @@
   </div>
 
   <div class="topbar-actions">
+    <div class="option-row">
+      <label class="toggle-label">
+        <input type="checkbox" id="opt-lightdarkmode">
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        Tryb ciemny/jasny
+      </label>
+    </div>
     <button class="btn-icon" id="btn-fit" title="Dopasuj widok (F)">⊡</button>
     <button class="btn-icon" id="btn-screenshot" title="Zapisz obraz">↓</button>
     <button class="btn-icon" id="btn-settings" title="Ustawienia">⚙</button>

@@ -331,6 +331,15 @@ function bindStyle() {
   // Topbar
   document.getElementById('btn-fit').addEventListener('click', () => renderer.fitView());
   document.getElementById('btn-screenshot').addEventListener('click', () => renderer.exportPng());
+
+  const toggle = document.getElementById('opt-lightdarkmode');
+  toggle.addEventListener('change', () => {
+    if (toggle.checked) {
+      document.body.classList.add('light');
+    } else {
+      document.body.classList.remove('light');
+    }
+  });
 }
 
 // =================================

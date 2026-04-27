@@ -255,92 +255,105 @@ export class GraphRenderer {
   // == Style Cytoscape =================================
 
   #buildStyle() {
+    const textPrimary   = getComputedStyle(document.body).getPropertyValue('--text-primary').trim();
+    const textSecondary = getComputedStyle(document.body).getPropertyValue('--text-secondary').trim();
+    const textMuted     = getComputedStyle(document.body).getPropertyValue('--text-muted').trim();
+
+    const bgHover       = getComputedStyle(document.body).getPropertyValue('--bg-hover').trim();
+    const bgActive      = getComputedStyle(document.body).getPropertyValue('--bg-active').trim();
+
+    const borderMid     = getComputedStyle(document.body).getPropertyValue('--border-mid').trim();
+
+    const accent        = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+    const accentDim     = getComputedStyle(document.body).getPropertyValue('--accent-dim').trim();
+
     return [
-      // ================================= Węzły =================================
+      // ========================= NODES =========================
       {
         selector: 'node',
         style: {
-          'width':            n => `${18 + Math.sqrt(n.data('weight') ?? 1) * 2}px`,
-          'height':           n => `${18 + Math.sqrt(n.data('weight') ?? 1) * 2}px`,
-          'background-color': '#1c2230',
-          'border-width':     1,
-          'border-color':     'rgba(255,255,255,0.15)',
-          'label':            '',   // domyślnie bez etykiet (auto przy zoom)
-          'color':            '#8892a0',
-          'font-family':      'IBM Plex Mono, monospace',
-          'font-size':        9,
-          'text-valign':      'bottom',
-          'text-halign':      'center',
-          'text-margin-y':    4,
-          'text-wrap':        'ellipsis',
-          'text-max-width':   '80px',
+          'width':  n => `${18 + Math.sqrt(n.data('weight') ?? 1) * 2}px`,
+          'height': n => `${18 + Math.sqrt(n.data('weight') ?? 1) * 2}px`,
+          'background-color': bgHover,
+          'border-width': 1,
+          'border-color': borderMid,
+          'label': '',
+          'color': textSecondary,
+          'font-family': 'IBM Plex Mono, monospace',
+          'font-size': 9,
+          'text-valign': 'bottom',
+          'text-halign': 'center',
+          'text-margin-y': 4,
+          'text-wrap': 'ellipsis',
+          'text-max-width': '80px',
           'transition-property': 'background-color, border-color, opacity',
           'transition-duration': '150ms',
         },
       },
-      // Wyróżnione (PageRank top)
+
       {
         selector: 'node[?highlighted]',
         style: {
-          'background-color': '#0e2a3a',
-          'border-color':     '#00c8ff',
-          'border-width':     2,
+          'background-color': bgActive,
+          'border-color': accent,
+          'border-width': 2,
         },
       },
-      // Zaznaczony
+
       {
         selector: 'node.selected',
         style: {
-          'background-color': '#00c8ff',
-          'border-color':     '#ffffff',
-          'border-width':     2,
-          'color':            '#ffffff',
-          'label':            'data(label)',
+          'background-color': accent,
+          'border-color': textPrimary,
+          'border-width': 2,
+          'color': textPrimary,
+          'label': 'data(label)',
         },
       },
-      // Sąsiad zaznaczonego
+
       {
         selector: 'node.neighbor',
         style: {
-          'background-color': '#1e3a4a',
-          'border-color':     'rgba(0,200,255,0.5)',
-          'label':            'data(label)',
+          'background-color': accentDim,
+          'border-color': accent,
+          'label': 'data(label)',
         },
       },
-      // Wyszarzony
+
       {
         selector: 'node.faded',
         style: { 'opacity': 0.12 },
       },
 
-      // ================================= Krawędzie =================================
+      // ========================= EDGES =========================
       {
         selector: 'edge',
         style: {
-          'width':               n => `${0.8 + Math.log1p(n.data('weight') ?? 1) * 0.4}px`,
-          'line-color':          'rgba(255,255,255,0.08)',
-          'target-arrow-color':  'rgba(255,255,255,0.08)',
-          'target-arrow-shape':  e => e.data('directed') ? 'triangle' : 'none',
-          'arrow-scale':         0.6,
-          'curve-style':         'bezier',
-          'label':               '',
-          'color':               '#4a5568',
-          'font-family':         'IBM Plex Mono, monospace',
-          'font-size':           8,
-          'text-rotation':       'autorotate',
+          'width': n => `${0.8 + Math.log1p(n.data('weight') ?? 1) * 0.4}px`,
+          'line-color': textMuted,
+          'target-arrow-color': textMuted,
+          'target-arrow-shape': e => e.data('directed') ? 'triangle' : 'none',
+          'arrow-scale': 0.6,
+          'curve-style': 'bezier',
+          'label': '',
+          'color': textMuted,
+          'font-family': 'IBM Plex Mono, monospace',
+          'font-size': 8,
+          'text-rotation': 'autorotate',
           'transition-property': 'line-color, opacity',
           'transition-duration': '150ms',
         },
       },
-      // Krawędź sąsiada zaznaczonego
+
       {
         selector: 'edge.neighbor',
         style: {
-          'line-color':         'rgba(0,200,255,0.4)',
-          'target-arrow-color': 'rgba(0,200,255,0.4)',
-          'width':              1.5,
+          'line-color': accent,
+          'target-arrow-color': accent,
+          'width': 1.5,
         },
       },
+
       {
         selector: 'edge.faded',
         style: { 'opacity': 0.04 },
