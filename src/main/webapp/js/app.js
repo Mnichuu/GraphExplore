@@ -36,7 +36,18 @@ document.addEventListener('DOMContentLoaded', () => {
   bindKeyboard();
 
   // Reaguj na kliknięcia węzłów
-  renderer.onNodeClick   = id => showNodeDetail(id);
+  renderer.onNodeClick = async (id) => {
+    showNodeDetail(id);
+
+    try {
+      const neighborhood = await api.getNeighbors(id);
+      renderer.addElements(neighborhood.nodes, neighborhood.edges);
+      setStatus(`Załadowano sąsiedztwo: ${neighborhood.nodes.length} sąsiadów`);
+    } catch (e) {
+      // Cicha obsługa — szczegóły węzła i tak się pokazały
+      console.warn('Błąd ładowania sąsiedztwa:', e);
+    }
+  };
   renderer.onCanvasClick = () => closeDetailPanel();
 
   // Aktualizuj licznik zoom

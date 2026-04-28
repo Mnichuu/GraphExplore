@@ -63,7 +63,7 @@ export class ApiClient {
   async getNodes(pageReq = {}) {
     const p = new URLSearchParams({
       cursor: pageReq.cursor  ?? '',
-      limit:  pageReq.limit   ?? 500,
+      limit:  pageReq.limit   ?? 100,
       vx:     pageReq.vx      ?? 0,
       vy:     pageReq.vy      ?? 0,
       vw:     pageReq.vw      ?? 0,
@@ -79,6 +79,14 @@ export class ApiClient {
    */
   async getNodeDetail(id) {
     return this._get(`/api/nodes/detail?id=${encodeURIComponent(id)}`);
+  }
+
+  /**
+   * 1-hop sąsiedztwo.
+   * @param {string} id
+   */
+  async getNeighbors(id) {
+    return this._get(`/api/nodes/neighbors?id=${encodeURIComponent(id)}`);
   }
 
   /**
