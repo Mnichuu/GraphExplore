@@ -78,7 +78,7 @@ export class ApiClient {
    * @param {string} id
    */
   async getNodeDetail(id) {
-    return this._get(`/api/nodes/${encodeURIComponent(id)}`);
+    return this._get(`/api/nodes/detail?id=${encodeURIComponent(id)}`);
   }
 
   /**
