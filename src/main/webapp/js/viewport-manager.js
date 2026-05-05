@@ -77,6 +77,7 @@ export class ViewportManager {
         vy: vp.y - buffer,
         vw: vp.w + buffer * 2,
         vh: vp.h + buffer * 2,
+        all: true,
       });
 
       // Wykryj reset serwera (nowy import)

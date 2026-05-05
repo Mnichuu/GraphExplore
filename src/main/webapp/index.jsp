@@ -108,6 +108,14 @@
         </div>
 
         <div class="option-row">
+          <label class="toggle-label">
+            <input type="checkbox" id="opt-all" checked>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            Załadować cały
+          </label>
+        </div>
+
+        <div class="option-row">
           <label class="option-label">Limit węzłów</label>
           <input type="number" class="input-num" id="opt-max-nodes" value="500000" step="100000">
         </div>

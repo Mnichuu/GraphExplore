@@ -19,6 +19,7 @@ export class ApiClient {
       directed:   opts.directed   ?? true,
       blankNodes: opts.blankNodes ?? true,
       literals:   opts.literals   ?? true,
+      all:        opts.all        ?? '1',
       maxNodes:   opts.maxNodes   ?? 500_000,
     });
 
@@ -61,6 +62,7 @@ export class ApiClient {
    * @param {Object} pageReq – {cursor, limit, vx, vy, vw, vh, filter}
    */
   async getNodes(pageReq = {}) {
+    const all = document.getElementById('opt-all').checked;
     const p = new URLSearchParams({
       cursor: pageReq.cursor  ?? '',
       limit:  pageReq.limit   ?? 100,
@@ -69,6 +71,7 @@ export class ApiClient {
       vw:     pageReq.vw      ?? 0,
       vh:     pageReq.vh      ?? 0,
       filter: pageReq.filter  ?? '',
+      all:    all             ? '1' : '0',
     });
     return this._get(`/api/nodes?${p}`);
   }

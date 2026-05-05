@@ -165,6 +165,7 @@ async function doImport() {
   const directed = document.getElementById('opt-directed').checked;
   const blanks   = document.getElementById('opt-blanks').checked;
   const literals = document.getElementById('opt-literals').checked;
+  const all = document.getElementById('opt-all').checked;
   const maxNodes = parseInt(document.getElementById('opt-max-nodes').value) || 500_000;
 
   const btn      = document.getElementById('btn-import');
@@ -191,7 +192,7 @@ async function doImport() {
 
     let meta;
     if (isRdf) {
-      meta = await api.importRdf(file, { lang: format, directed, blankNodes: blanks, literals, maxNodes });
+      meta = await api.importRdf(file, { lang: format, directed, blankNodes: blanks, literals, all, maxNodes });
     } else {
       meta = await api.importGraph(file, { format, directed });
     }
