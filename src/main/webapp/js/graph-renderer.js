@@ -110,6 +110,95 @@ export class GraphRenderer {
     };
   }
 
+  /**
+   * Dodaje sąsiadów wokół węzła centralnego w okręgu.
+   * Węzeł centralny nie zmienia pozycji.
+   * @param {string} centerId - ID klikniętego węzła
+   * @param {Array}  nodes    - sąsiedzi do dodania
+   * @param {Array}  edges    - krawędzie do dodania
+   */
+  addNeighbors(centerId, nodes, edges) {
+    const center = this.#cy.getElementById(centerId);
+    if (!center.length) return;
+
+    const cx = center.position('x');
+    const cy = center.position('y');
+
+    // Promień okręgu zależy od liczby sąsiadów
+    const radius  = Math.max(120, nodes.length * 25);
+    const newEls  = [];
+    let   added   = 0;
+
+    for (const n of nodes) {
+      if (this.#cy.getElementById(n.id).length > 0) continue;
+
+      // Równomierne rozmieszczenie na okręgu
+      const angle = (2 * Math.PI * added) / nodes.length;
+      const x     = cx + radius * Math.cos(angle);
+      const y     = cy + radius * Math.sin(angle);
+
+      newEls.push({
+        group: 'nodes',
+        data: {
+          id:     n.id,
+          label:  n.label ?? n.id,
+          type:   n.attributes?.type ?? '',
+          weight: n.weight ?? 1,
+          attrs:  n.attributes ?? {},
+        },
+        position: { x, y },
+      });
+      added++;
+    }
+
+    for (const e of edges) {
+      const key = e.id ?? `${e.source}→${e.target}`;
+      if (this.#cy.getElementById(key).length > 0) continue;
+      newEls.push({
+        group: 'edges',
+        data: {
+          id:       key,
+          source:   e.source,
+          target:   e.target,
+          label:    e.label ?? '',
+          weight:   e.weight ?? 1,
+          directed: e.directed ?? true,
+        },
+      });
+    }
+
+    if (newEls.length > 0) {
+      this.#cy.add(newEls);
+    }
+  }
+
+  /** Ukrywa węzeł i jego krawędzie */
+  hideNode(id) {
+    const node = this.#cy.getElementById(id);
+    if (!node.length) return;
+    node.style('display', 'none');
+    node.connectedEdges().style('display', 'none');
+  }
+
+  /** Ukrywa wszystkich sąsiadów węzła którzy nie mają innych połączeń na canvasie */
+  hideNeighbors(id) {
+    const node = this.#cy.getElementById(id);
+    if (!node.length) return;
+
+    node.neighborhood('node').forEach(neighbor => {
+      // Ukryj sąsiada tylko jeśli jedyne jego połączenie na canvasie to ten węzeł
+      const visibleConnections = neighbor.connectedEdges()
+          .filter(e => e.style('display') !== 'none')
+          .connectedNodes()
+          .filter(n => n.id() !== neighbor.id() && n.id() !== id);
+
+      if (visibleConnections.length === 0) {
+        neighbor.style('display', 'none');
+        neighbor.connectedEdges().style('display', 'none');
+      }
+    });
+  }
+
   // == Layout =================================
 
   /**
@@ -245,7 +334,7 @@ export class GraphRenderer {
   // == Eksport PNG =================================
 
   exportPng() {
-    const dataUrl = this.#cy.png({ scale: 2, full: false, bg: '#080a0d' });
+    const dataUrl = this.#cy.png({ scale: 2, full: false, bg: 'white', quality: 1 });
     const a = document.createElement('a');
     a.href = dataUrl;
     a.download = 'graph-export.png';
@@ -386,6 +475,19 @@ export class GraphRenderer {
         cy.nodes().style('label', show ? 'data(label)' : '');
       }
       this.onViewport?.();
+    });
+
+    cy.on('cxttap', 'node', (evt) => {
+      const node    = evt.target;
+      const id      = node.id();
+      const pos     = evt.renderedPosition;
+      const contextMenu = document.getElementById('context-menu');
+
+      // Pokaż menu w miejscu kliknięcia
+      contextMenu.style.left    = pos.x + 'px';
+      contextMenu.style.top     = pos.y + 'px';
+      contextMenu.style.display = 'block';
+      contextMenu.dataset.nodeId = id;
     });
   }
 }

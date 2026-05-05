@@ -41,10 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const neighborhood = await api.getNeighbors(id);
-      renderer.addElements(neighborhood.nodes, neighborhood.edges);
-      setStatus(`Załadowano sąsiedztwo: ${neighborhood.nodes.length} sąsiadów`);
+
+      renderer.addNeighbors(id, neighborhood.nodes, neighborhood.edges);
+
+      const newCount = neighborhood.nodes.length;
+      setStatus(`${newCount} nowych sąsiadów`);
+
     } catch (e) {
-      // Cicha obsługa — szczegóły węzła i tak się pokazały
       console.warn('Błąd ładowania sąsiedztwa:', e);
     }
   };
@@ -383,6 +386,7 @@ async function showNodeDetail(id) {
   const panel = document.getElementById('detail-panel');
   const body  = document.getElementById('detail-body');
   const title = document.getElementById('detail-title');
+  const contextMenu = document.getElementById('context-menu');
 
   panel.classList.add('open');
   title.textContent = 'Ładowanie…';
@@ -486,6 +490,32 @@ function bindCollapsibles() {
     });
   });
 }
+
+// =================================
+//   PRAWY PRZYCISK
+// =================================
+
+// Menu kontekstowe — prawy klik na węźle
+const contextMenu = document.getElementById('context-menu');
+
+// Klik poza menu — ukryj je
+document.addEventListener('click', () => {
+  contextMenu.style.display = 'none';
+});
+
+// Akcje menu
+document.getElementById('ctx-hide-node').addEventListener('click', () => {
+  const id = contextMenu.dataset.nodeId;
+  renderer.hideNode(id);
+  contextMenu.style.display = 'none';
+});
+
+document.getElementById('ctx-hide-neighbors').addEventListener('click', () => {
+  const id = contextMenu.dataset.nodeId;
+  renderer.hideNeighbors(id);
+  contextMenu.style.display = 'none';
+});
+
 // =================================
 //   KLAWIATURA
 // =================================

@@ -295,6 +295,7 @@
     </div>
   </aside>
 
+
 </div><!-- /.workspace -->
 
 <!-- ═══ TOAST ═══ -->
@@ -307,5 +308,10 @@
 <script>
   window.APP_CONTEXT = '${pageContext.request.contextPath}';
 </script>
+<!-- Menu kontekstowe węzła -->
+<div id="context-menu" style="display:none; position:fixed; z-index:500;">
+  <button id="ctx-hide-node">Ukryj węzeł</button>
+  <button id="ctx-hide-neighbors">Ukryj sąsiadów</button>
+</div>
 </body>
 </html>

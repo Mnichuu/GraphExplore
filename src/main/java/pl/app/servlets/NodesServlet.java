@@ -31,7 +31,37 @@ public class NodesServlet extends HttpServlet {
             return;
         }
 
-        // Budowanie węzłów
+        var graph = store.getGraph();
+
+        // Znajdź węzeł z największą liczbą połączeń
+        String hubId = graph.vertexSet().stream()
+                .max(Comparator.comparingInt(graph::degreeOf))
+                .orElse(null);
+
+        if (hubId == null) {
+            jackson.writeValue(resp.getWriter(),
+                    Map.of("nodes", List.of(), "edges", List.of(), "nextCursor", null, "version", 1));
+            return;
+        }
+
+        Node hub = store.getNode(hubId);
+
+        Map<String, Object> n = new LinkedHashMap<>();
+        n.put("id",         hubId);
+        n.put("label",      hub.getLabel());
+        n.put("attributes", hub.getAttributes());
+        n.put("weight",     graph.degreeOf(hubId));
+
+        Map<String, Object> response = new LinkedHashMap<>();
+        response.put("nodes",      List.of(n));
+        response.put("edges",      List.of());  // brak krawędzi — węzeł jest sam
+        response.put("nextCursor", null);
+        response.put("version",    1);
+
+        resp.setStatus(HttpServletResponse.SC_OK);
+        jackson.writeValue(resp.getWriter(), response);
+
+/*        // Budowanie węzłów
         List<Map<String, Object>> nodes = new ArrayList<>();
         for (Node node : store.getAllNodes()) {
             Map<String, Object> n = new LinkedHashMap<>();
@@ -62,6 +92,6 @@ public class NodesServlet extends HttpServlet {
         response.put("version",    1);
 
         resp.setStatus(HttpServletResponse.SC_OK);
-        jackson.writeValue(resp.getWriter(), response);
+        jackson.writeValue(resp.getWriter(), response);*/
     }
 }
