@@ -245,15 +245,21 @@ export class GraphRenderer {
 
   /** Widoczność etykiet: 'auto' | 'always' | 'never' */
   setLabelVisibility(mode) {
-    const z = this.#cy.zoom();
-    const show = mode === 'always' || (mode === 'auto' && z > 0.6);
-    this.#cy.nodes().style('label', show ? 'data(label)' : '');
     this._labelMode = mode;
+    const show = mode === 'always' || (mode === 'auto' && this.#cy.zoom() > 0.6);
+    if (show) {
+      this.#cy.nodes().style('label', node => node.data('label'));
+    } else {
+      this.#cy.nodes().style('label', '');
+    }
   }
-
   /** Etykiety krawędzi włącz/wyłącz */
   setEdgeLabels(show) {
-    this.#cy.edges().style('label', show ? 'data(label)' : '');
+    if (show) {
+      this.#cy.edges().style('label', edge => edge.data('label'));
+    } else {
+      this.#cy.edges().style('label', '');
+    }
   }
 
   // == Zaznaczanie / filtrowanie =================================
@@ -469,10 +475,13 @@ export class GraphRenderer {
     });
 
     cy.on('zoom pan', () => {
-      // Auto-etykiety przy dużym zbliżeniu
       if (this._labelMode === 'auto') {
         const show = cy.zoom() > 0.6;
-        cy.nodes().style('label', show ? 'data(label)' : '');
+        if (show) {
+          cy.nodes().style('label', node => node.data('label'));
+        } else {
+          cy.nodes().style('label', '');
+        }
       }
       this.onViewport?.();
     });

@@ -46,12 +46,6 @@ export class ViewportManager {
     await this.#loadPage();
   }
 
-  /** Zatrzymuje automatyczne ładowanie */
-  stop() {
-    clearTimeout(this.#timer);
-    this.#loading = false;
-  }
-
   // == Wewnętrzne =================================
 
   #schedule(delay = 250) {

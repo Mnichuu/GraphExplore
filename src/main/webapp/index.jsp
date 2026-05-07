@@ -115,11 +115,6 @@
           </label>
         </div>
 
-        <div class="option-row">
-          <label class="option-label">Limit węzłów</label>
-          <input type="number" class="input-num" id="opt-max-nodes" value="500000" step="100000">
-        </div>
-
         <button class="btn-primary" id="btn-import" disabled>
           <span class="btn-text">Importuj</span>
           <span class="btn-loader" hidden>●●●</span>
@@ -156,13 +151,6 @@
         </div>
 
         <div class="option-row">
-          <label class="option-label">Typ węzła</label>
-          <select class="select" id="filter-type">
-            <option value="">Wszystkie</option>
-          </select>
-        </div>
-
-        <div class="option-row">
           <label class="toggle-label">
             <input type="checkbox" id="filter-orphans">
             <span class="toggle-track"><span class="toggle-thumb"></span></span>
@@ -191,14 +179,6 @@
           <button class="layout-btn" data-layout="grid">Siatka</button>
           <button class="layout-btn" data-layout="concentric">Koncentr.</button>
         </div>
-
-        <div class="option-row">
-          <label class="option-label">Odpychanie</label>
-          <input type="range" id="layout-repulsion" min="1000" max="20000" value="4500" class="slider">
-          <span class="slider-val" id="layout-repulsion-val">4500</span>
-        </div>
-
-        <button class="btn-secondary" id="btn-relayout">Przelicz layout</button>
       </div>
     </section>
 

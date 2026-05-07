@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Reaguj na kliknięcia węzłów
   renderer.onNodeClick = async (id) => {
     showNodeDetail(id);
-
     try {
       const neighborhood = await api.getNeighbors(id);
 
@@ -46,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const newCount = neighborhood.nodes.length;
       setStatus(`${newCount} nowych sąsiadów`);
-
+      updateTopbarStats();
     } catch (e) {
       console.warn('Błąd ładowania sąsiedztwa:', e);
     }
@@ -166,7 +165,7 @@ async function doImport() {
   const blanks   = document.getElementById('opt-blanks').checked;
   const literals = document.getElementById('opt-literals').checked;
   const all = document.getElementById('opt-all').checked;
-  const maxNodes = parseInt(document.getElementById('opt-max-nodes').value) || 500_000;
+  const maxNodes = 500_000;
 
   const btn      = document.getElementById('btn-import');
   const btnText  = btn.querySelector('.btn-text');
@@ -305,16 +304,6 @@ function bindLayout() {
       state.activeLayout = btn.dataset.layout;
       if (state.graphLoaded) renderer.runLayout(state.activeLayout);
     });
-  });
-
-  document.getElementById('layout-repulsion').addEventListener('input', e => {
-    document.getElementById('layout-repulsion-val').textContent = e.target.value;
-  });
-
-  document.getElementById('btn-relayout').addEventListener('click', () => {
-    if (!state.graphLoaded) return;
-    const repulsion = parseInt(document.getElementById('layout-repulsion').value);
-    renderer.runLayout(state.activeLayout, { nodeRepulsion: () => repulsion });
   });
 }
 
@@ -509,12 +498,14 @@ document.getElementById('ctx-hide-node').addEventListener('click', () => {
   const id = contextMenu.dataset.nodeId;
   renderer.hideNode(id);
   contextMenu.style.display = 'none';
+  updateTopbarStats();
 });
 
 document.getElementById('ctx-hide-neighbors').addEventListener('click', () => {
   const id = contextMenu.dataset.nodeId;
   renderer.hideNeighbors(id);
   contextMenu.style.display = 'none';
+  updateTopbarStats();
 });
 
 // =================================
@@ -561,6 +552,9 @@ function toast(msg, type = 'info', duration = 3000) {
 // =================================
 
 function updateTopbarStats() {
+  const c = renderer.elementCount;
+  state.nodeCount = c.nodes;
+  state.edgeCount = c.edges;
   document.getElementById('stat-nodes').textContent   = fmtNum(state.nodeCount) + ' węzłów';
   document.getElementById('stat-edges').textContent   = fmtNum(state.edgeCount) + ' krawędzi';
   updateVisibleCount();
