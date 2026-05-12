@@ -456,6 +456,56 @@ export class GraphRenderer {
     ];
   }
 
+  // == Export =================================
+  /**
+   * Eksportuje pełny stan wizualizacji do pliku JSON.
+   * Zawiera: węzły, krawędzie, pozycje, widoczność, zoom, pan.
+   */
+  exportState(filename = 'graph-export.json') {
+    const state = {
+      version:  1,
+      exported: new Date().toISOString(),
+
+      graph: this.#cy.json(),
+
+      viewport: {
+        zoom: this.#cy.zoom(),
+        pan:  this.#cy.pan(),
+      },
+    };
+
+    const blob = new Blob(
+        [JSON.stringify(state, null, 2)],
+        { type: 'application/json' }
+    );
+
+    const a = document.createElement('a');
+    a.href     = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // == Import =================================
+  /**
+   * Wczytuje stan wizualizacji z obiektu JSON (wcześniej wyeksportowanego).
+   * Odtwarza pozycje węzłów, widoczność i viewport.
+   */
+  importState(stateJson) {
+    const state = typeof stateJson === 'string'
+        ? JSON.parse(stateJson)
+        : stateJson;
+
+    if (!state.graph) throw new Error('Nieprawidłowy format pliku eksportu');
+
+    this.#cy.json(state.graph);
+
+    if (state.viewport) {
+      this.#cy.zoom(state.viewport.zoom);
+      this.#cy.pan(state.viewport.pan);
+    }
+  }
+
   // == Eventy Cytoscape =================================
 
   #bindEvents() {

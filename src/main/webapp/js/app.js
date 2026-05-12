@@ -346,6 +346,48 @@ function bindStyle() {
   });
 }
 
+// Lepiej: osobny przycisk eksportu stanu
+document.getElementById('btn-export-state').addEventListener('click', () => {
+  if (!state.graphLoaded) {
+    toast('Brak załadowanego grafu', 'warn');
+    return;
+  }
+  const filename = `graph-${Date.now()}.json`;
+  renderer.exportState(filename);
+  toast('Wyeksportowano stan wizualizacji', 'ok');
+});
+
+// Import stanu z pliku
+document.getElementById('btn-import-state').addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type   = 'file';
+  input.accept = '.json';
+
+  input.addEventListener('change', async () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    try {
+      const text  = await file.text();
+      renderer.importState(text);
+
+      state.graphLoaded = true;
+      document.getElementById('empty-state').classList.add('hidden');
+
+      const c = renderer.elementCount;
+      state.nodeCount = c.nodes;
+      state.edgeCount = c.edges;
+      updateTopbarStats();
+
+      toast('Przywrócono stan wizualizacji', 'ok');
+    } catch (e) {
+      toast('Błąd wczytywania pliku: ' + e.message, 'err');
+    }
+  });
+
+  input.click();
+});
+
 // =================================
 //   ZOOM CONTROLS
 // =================================

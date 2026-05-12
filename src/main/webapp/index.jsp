@@ -39,9 +39,11 @@
         Tryb ciemny/jasny
       </label>
     </div>
-    <button class="btn-icon" id="btn-fit" title="Dopasuj widok (F)">⊡</button>
-    <button class="btn-icon" id="btn-screenshot" title="Zapisz obraz">↓</button>
-    <button class="btn-icon" id="btn-settings" title="Ustawienia">⚙</button>
+    <button class="btn-icon" id="btn-fit"          title="Dopasuj widok (F)">⊡</button>
+    <button class="btn-icon" id="btn-export-state" title="Eksport stanu (.json)">↓</button>
+    <button class="btn-icon" id="btn-import-state" title="Import stanu (.json)">↑</button>
+    <button class="btn-icon" id="btn-screenshot"   title="Zapisz obraz PNG">⬡</button>
+    <button class="btn-icon" id="btn-settings"     title="Ustawienia">⚙</button>
   </div>
 </header>
 
