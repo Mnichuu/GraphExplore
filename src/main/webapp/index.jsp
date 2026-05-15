@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Cytoscape.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.29.2/cytoscape.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.0/cytoscape.min.js"></script>
   <!-- fCoSE layout (force-directed, duże grafy) -->
   <script src="https://cdn.jsdelivr.net/npm/cytoscape-fcose@2.2.0/cytoscape-fcose.js"></script>
 </head>
@@ -62,7 +62,7 @@
       <div class="drop-zone" id="drop-zone">
         <div class="drop-icon">⬆</div>
         <div class="drop-label">Upuść plik lub kliknij</div>
-        <div class="drop-sub">GraphML · Turtle · N-Triples · JSON-LD · RDF/XML</div>
+        <div class="drop-sub">Turtle · N-Triples · RDF/XML</div>
         <input type="file" id="file-input" accept=".graphml,.ttl,.nt,.nq,.jsonld,.rdf,.owl,.json,.xml" hidden>
       </div>
 

@@ -72,7 +72,6 @@ function bindViewportManager() {
 
   vpm.onLoadEnd = ({ nodes, edges }) => {
     const c = renderer.elementCount;
-    state.nodeCount = c.nodes;
     state.edgeCount = c.edges;
     updateTopbarStats();
     setStatus('Gotowy');
@@ -595,9 +594,7 @@ function toast(msg, type = 'info', duration = 3000) {
 
 function updateTopbarStats() {
   const c = renderer.elementCount;
-  state.nodeCount = c.nodes;
-  state.edgeCount = c.edges;
-  document.getElementById('stat-nodes').textContent   = fmtNum(state.nodeCount) + ' węzłów';
+  state.edgeCount = renderer.cy.edges(':visible').length;
   document.getElementById('stat-edges').textContent   = fmtNum(state.edgeCount) + ' krawędzi';
   updateVisibleCount();
 }

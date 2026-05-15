@@ -222,9 +222,9 @@ export class GraphRenderer {
     const shared = { animate: true, animationDuration: 500, fit: true, padding: 60 };
     switch (name) {
       case 'fcose':        return { ...shared, quality: 'default', randomize: false,
-                                    repulsionStrength: 4500, nodeRepulsion: () => 4500,
+                                    repulsionStrength: 5500, nodeRepulsion: () => 4500,
                                     idealEdgeLength: () => 80 };
-      case 'cose':         return { ...shared, nodeRepulsion: () => 4500, idealEdgeLength: 80 };
+      case 'cose':         return { ...shared, nodeRepulsion: () => 3500, idealEdgeLength: 80 };
       case 'breadthfirst': return { ...shared, directed: true, spacingFactor: 1.4 };
       case 'concentric':   return { ...shared, spacingFactor: 1.5,
                                     concentric: n => n.data('weight'),
