@@ -16,6 +16,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.Integer.parseInt;
+
 @WebServlet("/api/nodes/top")
 public class TopServlet extends HttpServlet {
 
@@ -36,7 +38,7 @@ public class TopServlet extends HttpServlet {
         }
 
         GraphService service = new GraphService();
-        List<String> topNodes = service.getTopNodesByPageRank(req.getParameter("n") != null ? Integer.parseInt(req.getParameter("n")) : 10);
+        List<String> topNodes = service.getTopNodesByPageRank(req.getParameter("n") != null ? parseInt(req.getParameter("n")) : 10);
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("topNodes", topNodes);

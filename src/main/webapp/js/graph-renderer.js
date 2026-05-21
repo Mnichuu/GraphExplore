@@ -243,6 +243,22 @@ export class GraphRenderer {
     });
   }
 
+  /**
+   * Wyróżnia węzły o najwyższym stopniu (hub nodes).
+   * @param {string[]} topNodeIds - lista ID węzłów do wyróżnienia
+   */
+  setTopNodes(topNodeIds) {
+    const topSet = new Set(topNodeIds);
+
+    this.#cy.nodes().forEach(node => {
+      if (topSet.has(node.id())) {
+        node.data('highlighted', true);
+      } else {
+        node.data('highlighted', false);
+      }
+    });
+  }
+
   /** Widoczność etykiet: 'auto' | 'always' | 'never' */
   setLabelVisibility(mode) {
     this._labelMode = mode;

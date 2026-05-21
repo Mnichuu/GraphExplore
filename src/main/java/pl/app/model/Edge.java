@@ -45,9 +45,7 @@ public class Edge {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
+    public void setLabel(String label) { this.label = label; }
 
     public URI getPredicate() {
         return predicate;

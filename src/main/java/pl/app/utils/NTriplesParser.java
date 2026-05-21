@@ -52,7 +52,6 @@ public class NTriplesParser {
         GraphMetadata metadata = new GraphMetadata(filename, 0, 0, directed, filename);
         GraphStore.getInstance().initialize(directed, metadata);
 
-        // StreamRDF — Jena wywołuje triple() dla każdej linii pliku
         StreamRDF sink = new StreamRDFBase() {
 
             @Override
@@ -60,7 +59,6 @@ public class NTriplesParser {
                 try {
                     processTriple(triple, blankNodeMap, nodeCount, edgeCount, skipped);
                 } catch (Exception e) {
-                    // Nie przerywaj parsowania przez jeden błąd
                     skipped[0]++;
                     LOG.warning("Pominięto trójkę: " + triple + " — " + e.getMessage());
                 }

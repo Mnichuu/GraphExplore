@@ -206,15 +206,18 @@ async function doImport() {
     // Pobierz top węzły (PageRank) do wyróżnienia
     let topNodes = [];
     if (state.highlightTop) {
-      try { topNodes = await api.getTopNodes(20); } catch (_) {}
+      try {
+        topNodes = await api.getTopNodes(10);
+        renderer.setTopNodes(topNodes);
+      } catch (_) {}
     }
-
     progBar.style.width = '90%';
     progLbl.textContent = 'Renderowanie…';
 
     // Reset renderera i załaduj dane
     state.graphLoaded = false;
     renderer.clear();
+
     document.getElementById('empty-state').classList.remove('hidden');
 
     await vpm.reload();

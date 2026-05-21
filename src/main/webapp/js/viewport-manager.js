@@ -84,7 +84,7 @@ export class ViewportManager {
       if (page.version) this.#version = page.version;
 
       // Wgraj do renderera
-      this.#renderer.addElements(page.nodes ?? [], page.edges ?? []);
+      this.#renderer.addElements(page.nodes ?? [], page.edges ?? [], page.topNodes);
 
       this.#cursor = page.nextCursor ?? null;
       this.#done   = !page.nextCursor;

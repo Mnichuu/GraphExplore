@@ -28,22 +28,13 @@ public class GraphStore {
 
     // <URI.toString(), Node>
     private final Map<String, Node> nodes = new LinkedHashMap<>();
-
     // <Edge.id, Edge>
     private final Map<String, Edge> edges = new LinkedHashMap<>();
-
     // Struktura grafu w JGraphT <wierzchołek = URI string, krawędź = Edge.id>
     private Graph<String, String> graph;
     private GraphMetadata metadata;
 
-    // == Inicjalizacja ==
-    /**
-     * Przygotowuje pusty store na nowy graf.
-     * Wywoływane na początku każdego importu — czyści poprzedni graf.
-     *
-     * @param directed czy graf jest skierowany
-     * @param metadata metadane nowego grafu
-     */
+
     public void initialize(boolean directed, GraphMetadata metadata) {
         nodes.clear();
         edges.clear();
