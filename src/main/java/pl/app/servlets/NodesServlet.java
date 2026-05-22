@@ -50,32 +50,34 @@ public class NodesServlet extends HttpServlet {
             throws IOException {
 
         var graph = store.getGraph();
+        int maxDegree = graph.vertexSet().stream()
+                .mapToInt(graph::degreeOf)
+                .max()
+                .orElse(-1);
 
-        String hubId = graph.vertexSet().stream()
-                .max(Comparator.comparingInt(graph::degreeOf))
-                .orElse(null);
-
-        if (hubId == null) {
+        if (maxDegree < 0) {
             jackson.writeValue(resp.getWriter(),
-                    Map.of(
-                            "nodes", List.of(),
-                            "edges", List.of(),
-                            "nextCursor", null,
-                            "version", 1
+                    Map.of("nodes", List.of(), "edges", List.of(), "nextCursor", null, "version", 1
                     ));
             return;
         }
 
-        Node hub = store.getNode(hubId);
+        List<Map<String, Object>> nodes = new ArrayList<>();
+        for (String vertexId : graph.vertexSet()) {
+            if (graph.degreeOf(vertexId) == maxDegree) {
+                Node hub = store.getNode(vertexId);
 
-        Map<String, Object> n = new LinkedHashMap<>();
-        n.put("id", hubId);
-        n.put("label", hub.getLabel());
-        n.put("attributes", hub.getAttributes());
-        n.put("weight", graph.degreeOf(hubId));
+                Map<String, Object> n = new LinkedHashMap<>();
+                n.put("id", vertexId);
+                n.put("label", hub.getLabel());
+                n.put("attributes", hub.getAttributes());
+                n.put("weight", graph.degreeOf(vertexId));
+                nodes.add(n);
+            }
+        }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        response.put("nodes", List.of(n));
+        response.put("nodes", nodes);
         response.put("edges", List.of());
         response.put("nextCursor", null);
         response.put("version", 1);

@@ -124,7 +124,6 @@ export class GraphRenderer {
     const cx = center.position('x');
     const cy = center.position('y');
 
-    // Promień okręgu zależy od liczby sąsiadów
     const radius  = Math.max(120, nodes.length * 25);
     const newEls  = [];
     let   added   = 0;
@@ -132,7 +131,6 @@ export class GraphRenderer {
     for (const n of nodes) {
       if (this.#cy.getElementById(n.id).length > 0) continue;
 
-      // Równomierne rozmieszczenie na okręgu
       const angle = (2 * Math.PI * added) / nodes.length;
       const x     = cx + radius * Math.cos(angle);
       const y     = cy + radius * Math.sin(angle);

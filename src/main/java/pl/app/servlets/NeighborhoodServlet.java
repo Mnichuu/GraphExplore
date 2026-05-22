@@ -44,8 +44,7 @@ public class NeighborhoodServlet extends HttpServlet {
             jackson.writeValue(resp.getWriter(), Map.of("error", "Węzeł nie istnieje: " + nodeId));
             return;
         }
-
-        // Zbierz sąsiadów i krawędzie przez JGraphT
+        
         List<Map<String, Object>> nodes = new ArrayList<>();
         List<Map<String, Object>> edges = new ArrayList<>();
         boolean directed = store.getMetadata().isDirected();
@@ -54,10 +53,8 @@ public class NeighborhoodServlet extends HttpServlet {
             String source = graph.getEdgeSource(edgeId);
             String target = graph.getEdgeTarget(edgeId);
 
-            // Drugi koniec krawędzi = sąsiad
             String neighborId = source.equals(nodeId) ? target : source;
 
-            // Dodaj węzeł sąsiada
             Node neighbor = store.getNode(neighborId);
             if (neighbor != null) {
                 Map<String, Object> n = new LinkedHashMap<>();
@@ -68,7 +65,6 @@ public class NeighborhoodServlet extends HttpServlet {
                 nodes.add(n);
             }
 
-            // Dodaj krawędź
             Map<String, Object> e = new LinkedHashMap<>();
             e.put("id",       edgeId);
             e.put("source",   source);

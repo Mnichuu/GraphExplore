@@ -35,14 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
   bindCollapsibles();
   bindKeyboard();
 
-  // Reaguj na kliknięcia węzłów
   renderer.onNodeClick = async (id) => {
     showNodeDetail(id);
     try {
       const neighborhood = await api.getNeighbors(id);
-
       renderer.addNeighbors(id, neighborhood.nodes, neighborhood.edges);
-
+      neighborhood.nodes.forEach(n => {
+            renderer.cy.getElementById(n.id).style('display', '');
+            renderer.cy.getElementById(n.id).connectedEdges().style('display', '');
+      }
+      );
       const newCount = neighborhood.nodes.length;
       setStatus(`${newCount} nowych sąsiadów`);
       updateTopbarStats();
@@ -50,9 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Błąd ładowania sąsiedztwa:', e);
     }
   };
+
   renderer.onCanvasClick = () => closeDetailPanel();
 
-  // Aktualizuj licznik zoom
   renderer.onViewport = () => {
     updateZoomLabel();
     vpm.onViewport?.();
