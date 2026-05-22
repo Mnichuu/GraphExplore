@@ -95,24 +95,24 @@ public class ImportServlet extends HttpServlet {
         // Najpierw jawny parametr z żądania
         if (format != null && !format.isBlank()) {
             switch (format.toLowerCase()) {
-                case "ntriples": return Lang.NTRIPLES;
-                case "turtle":   return Lang.TURTLE;
-                case "rdfxml":   return Lang.RDFXML;
-                case "jsonld":   return Lang.JSONLD;
-                case "nquads":   return Lang.NQUADS;
+                case "ntriples": return org.apache.jena.riot.RDFLanguages.NTRIPLES;
+                case "turtle":   return org.apache.jena.riot.RDFLanguages.TURTLE;
+                case "rdfxml":   return org.apache.jena.riot.RDFLanguages.RDFXML;
+                case "jsonld":   return org.apache.jena.riot.RDFLanguages.JSONLD;
+                case "nquads":   return org.apache.jena.riot.RDFLanguages.NQUADS;
             }
         }
         // Auto-detect z rozszerzenia pliku
         if (filename != null) {
             String lower = filename.toLowerCase();
-            if (lower.endsWith(".nt"))     return Lang.NTRIPLES;
-            if (lower.endsWith(".ttl"))    return Lang.TURTLE;
-            if (lower.endsWith(".rdf"))    return Lang.RDFXML;
-            if (lower.endsWith(".owl"))    return Lang.RDFXML;  // OWL serializowany jako RDF/XML
-            if (lower.endsWith(".jsonld")) return Lang.JSONLD;
-            if (lower.endsWith(".nq"))     return Lang.NQUADS;
+            if (lower.endsWith(".nt"))     return org.apache.jena.riot.RDFLanguages.NTRIPLES;
+            if (lower.endsWith(".ttl"))    return org.apache.jena.riot.RDFLanguages.TURTLE;
+            if (lower.endsWith(".rdf"))    return org.apache.jena.riot.RDFLanguages.RDFXML;
+            if (lower.endsWith(".owl"))    return org.apache.jena.riot.RDFLanguages.RDFXML;  // OWL serializowany jako RDF/XML
+            if (lower.endsWith(".jsonld")) return org.apache.jena.riot.RDFLanguages.JSONLD;
+            if (lower.endsWith(".nq"))     return org.apache.jena.riot.RDFLanguages.NQUADS;
         }
         // Domyślnie N-Triples
-        return Lang.NTRIPLES;
+        return org.apache.jena.riot.RDFLanguages.NTRIPLES;
     }
 }
