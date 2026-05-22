@@ -1,6 +1,6 @@
 package pl.app.utils;
 
-import org.apache.jena.riot.RDFParser;
+import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.system.StreamRDF;
 import org.apache.jena.riot.system.StreamRDFBase;
 import org.apache.jena.graph.Triple;
@@ -17,31 +17,30 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * Parser plików N-Triples (.nt).
- * Strategia mapowania:
- *   trójka z obiektem URI     -> krawędź subject → object
- *   trójka z obiektem literał -> atrybut węzła subject
- *   rdfs:label jako literał   -> dodatkowo ustawia Node.label
- *   blank node (_:b0)         -> zastępowany przez URI z UUID
+ * Parser plików RDF obsługujący wiele serializacji:
+ * N-Triples (.nt), Turtle (.ttl), RDF/XML (.rdf, .owl), JSON-LD (.jsonld).
+ *
+ * Logika mapowania trójek na graf jest identyczna dla wszystkich formatów —
+ * różnice składniowe obsługuje biblioteka Apache Jena przez parametr Lang.
  */
-public class NTriplesParser {
-    private static final Logger LOG = Logger.getLogger(NTriplesParser.class.getName());
+public class RDFParser {
+    private static final Logger LOG = Logger.getLogger(RDFParser.class.getName());
 
     private static final String RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label";
     private static final String FOAF_NAME  = "http://xmlns.com/foaf/0.1/name";
     private static final String SKOS_LABEL = "http://www.w3.org/2004/02/skos/core#prefLabel";
-
     private static final String RDF_TYPE   = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
     /**
-     * Parsuje strumień N-Triples i zapisuje wynik do GraphStore.
+     * Parsuje strumień RDF w podanym formacie i zapisuje wynik do GraphStore.
      *
-     * @param input    strumień danych (plik .nt)
-     * @param filename nazwa pliku — używana jako ID i label metadanych
+     * @param input    strumień danych
+     * @param filename nazwa pliku — używana jako ID metadanych
      * @param directed czy graf ma być skierowany
+     * @param lang     język serializacji RDF (Lang.NTRIPLES, Lang.TURTLE, Lang.RDFXML, ...)
      * @return metadane załadowanego grafu
      */
-    public GraphMetadata parse(InputStream input, String filename, boolean directed) {
+    public GraphMetadata parse(InputStream input, String filename, boolean directed, Lang lang) {
 
         Map<String, URI> blankNodeMap = new HashMap<>();
 
@@ -65,8 +64,8 @@ public class NTriplesParser {
             }
         };
 
-        RDFParser.source(input)
-                .lang(org.apache.jena.riot.RDFLanguages.NTRIPLES)
+        org.apache.jena.riot.RDFParser.source(input)
+                .lang(lang)
                 .checking(false)
                 .parse(sink);
 

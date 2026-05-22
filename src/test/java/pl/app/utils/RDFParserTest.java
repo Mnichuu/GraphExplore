@@ -1,5 +1,6 @@
 package pl.app.utils;
 
+import org.apache.jena.riot.Lang;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import pl.app.model.GraphMetadata;
@@ -11,7 +12,7 @@ import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class NTriplesParserTest {
+class RDFParserTest {
 
     private static final String ALICE = "http://example.org/Alice";
     private static final String BOB   = "http://example.org/Bob";
@@ -23,11 +24,11 @@ class NTriplesParserTest {
 
     private static final String RDF_TYPE   = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
-    private NTriplesParser parser;
+    private RDFParser parser;
 
     @BeforeEach
     void setUp() {
-        parser = new NTriplesParser();
+        parser = new RDFParser();
     }
 
     // == Metadane ==
@@ -186,6 +187,31 @@ class NTriplesParserTest {
     private GraphMetadata parse() {
         InputStream input = getClass().getResourceAsStream("/test.nt");
         assertNotNull(input, "Brak pliku test.nt w src/test/resources");
-        return parser.parse(input, "test.nt", true);
+        return parser.parse(input, "test.nt", true, resolveLang("ntriples", "test.nt"));
+    }
+
+    private Lang resolveLang(String format, String filename) {
+        // Najpierw jawny parametr z żądania
+        if (format != null && !format.isBlank()) {
+            switch (format.toLowerCase()) {
+                case "ntriples": return Lang.NTRIPLES;
+                case "turtle":   return Lang.TURTLE;
+                case "rdfxml":   return Lang.RDFXML;
+                case "jsonld":   return Lang.JSONLD;
+                case "nquads":   return Lang.NQUADS;
+            }
+        }
+        // Auto-detect z rozszerzenia pliku
+        if (filename != null) {
+            String lower = filename.toLowerCase();
+            if (lower.endsWith(".nt"))     return Lang.NTRIPLES;
+            if (lower.endsWith(".ttl"))    return Lang.TURTLE;
+            if (lower.endsWith(".rdf"))    return Lang.RDFXML;
+            if (lower.endsWith(".owl"))    return Lang.RDFXML;  // OWL serializowany jako RDF/XML
+            if (lower.endsWith(".jsonld")) return Lang.JSONLD;
+            if (lower.endsWith(".nq"))     return Lang.NQUADS;
+        }
+        // Domyślnie N-Triples
+        return Lang.NTRIPLES;
     }
 }

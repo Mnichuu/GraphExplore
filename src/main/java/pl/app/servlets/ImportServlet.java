@@ -8,8 +8,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import org.apache.jena.riot.Lang;
 import pl.app.model.GraphMetadata;
-import pl.app.utils.NTriplesParser;
+import pl.app.utils.RDFParser;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,13 +42,13 @@ public class ImportServlet extends HttpServlet {
 
             boolean directed = !"false".equalsIgnoreCase(req.getParameter("directed"));
 
-            String lang = req.getParameter("lang");
+            Lang lang = resolveLang(req.getParameter("lang"), filename);
             String blankNodes = req.getParameter("blankNodes");
             String literals = req.getParameter("literals");
             String maxNodes = req.getParameter("maxNodes");
 
-            NTriplesParser parser = new NTriplesParser();
-            GraphMetadata metadata = parser.parse(fileStream, filename, directed);
+            RDFParser parser = new RDFParser();
+            GraphMetadata metadata = parser.parse(fileStream, filename, directed, lang);
 
             resp.setStatus(HttpServletResponse.SC_OK);
             jackson.writeValue(resp.getWriter(), metadata);
@@ -88,5 +89,30 @@ public class ImportServlet extends HttpServlet {
         jackson.writeValue(resp.getWriter(),
                 Map.of("error", message != null ? message : "Nieznany błąd")
         );
+    }
+
+    private Lang resolveLang(String format, String filename) {
+        // Najpierw jawny parametr z żądania
+        if (format != null && !format.isBlank()) {
+            switch (format.toLowerCase()) {
+                case "ntriples": return Lang.NTRIPLES;
+                case "turtle":   return Lang.TURTLE;
+                case "rdfxml":   return Lang.RDFXML;
+                case "jsonld":   return Lang.JSONLD;
+                case "nquads":   return Lang.NQUADS;
+            }
+        }
+        // Auto-detect z rozszerzenia pliku
+        if (filename != null) {
+            String lower = filename.toLowerCase();
+            if (lower.endsWith(".nt"))     return Lang.NTRIPLES;
+            if (lower.endsWith(".ttl"))    return Lang.TURTLE;
+            if (lower.endsWith(".rdf"))    return Lang.RDFXML;
+            if (lower.endsWith(".owl"))    return Lang.RDFXML;  // OWL serializowany jako RDF/XML
+            if (lower.endsWith(".jsonld")) return Lang.JSONLD;
+            if (lower.endsWith(".nq"))     return Lang.NQUADS;
+        }
+        // Domyślnie N-Triples
+        return Lang.NTRIPLES;
     }
 }
