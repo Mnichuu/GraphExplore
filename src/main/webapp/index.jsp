@@ -62,7 +62,7 @@
         <div class="drop-icon">⬆</div>
         <div class="drop-label">Upuść plik lub kliknij</div>
         <div class="drop-sub">Turtle · N-Triples · RDF/XML</div>
-        <input type="file" id="file-input" accept=".graphml,.ttl,.nt,.nq,.jsonld,.rdf,.owl,.json,.xml" hidden>
+        <input type="file" id="file-input" accept=".ttl,.nt,.nq,.jsonld,.rdf,.owl" hidden>
       </div>
 
       <div class="import-options" id="import-options">
@@ -76,10 +76,6 @@
               <option value="nquads">N-Quads (.nq)</option>
               <option value="jsonld">JSON-LD (.jsonld)</option>
               <option value="rdfxml">RDF/XML (.rdf .owl)</option>
-            </optgroup>
-            <optgroup label="Grafy">
-              <option value="graphml">GraphML (.graphml)</option>
-              <option value="json">JSON Graph</option>
             </optgroup>
           </select>
         </div>
