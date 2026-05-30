@@ -250,9 +250,9 @@ export class GraphRenderer {
 
     this.#cy.nodes().forEach(node => {
       if (topSet.has(node.id())) {
-        node.data('highlighted', true);
+        node.addClass('highlighted');
       } else {
-        node.data('highlighted', false);
+        node.removeClass('highlighted');
       }
     });
   }
@@ -401,11 +401,11 @@ export class GraphRenderer {
       },
 
       {
-        selector: 'node[?highlighted]',
+        selector: 'node.highlighted',
         style: {
           'background-color': bgActive,
           'border-color': accent,
-          'border-width': 2,
+          'border-width': 3,
         },
       },
 

@@ -205,14 +205,6 @@ async function doImport() {
     document.getElementById('stat-nodes').textContent  = fmtNum(meta.nodeCount) + ' węzłów';
     document.getElementById('stat-edges').textContent  = fmtNum(meta.edgeCount) + ' krawędzi';
 
-    // Pobierz top węzły (PageRank) do wyróżnienia
-    let topNodes = [];
-    if (state.highlightTop) {
-      try {
-        topNodes = await api.getTopNodes(10);
-        renderer.setTopNodes(topNodes);
-      } catch (_) {}
-    }
     progBar.style.width = '90%';
     progLbl.textContent = 'Renderowanie…';
 
@@ -227,6 +219,15 @@ async function doImport() {
     progBar.style.width = '100%';
     progLbl.textContent = 'Gotowe!';
 
+    // Pobierz top węzły (PageRank) do wyróżnienia
+    if (state.highlightTop) {
+      try {
+        let response = await api.getTopNodes(10);
+        renderer.setTopNodes(response.topNodes);
+      } catch (e) {
+        console.log(e);
+      }
+    }
     toast(`Załadowano ${fmtNum(meta.nodeCount)} węzłów, ${fmtNum(meta.edgeCount)} krawędzi`, 'ok');
 
     setTimeout(() => { progress.hidden = true; progBar.style.width = '0%'; }, 1500);
