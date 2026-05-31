@@ -694,6 +694,11 @@ body.light .status-bar {
   width: var(--detail-w);
 }
 
+.detail-panel:has(#neighbors-section:not([hidden])) .detail-body {
+  flex: 0 1 auto;
+  max-height: 40%;
+}
+
 .detail-header {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
@@ -720,7 +725,8 @@ body.light .status-bar {
 }
 
 .detail-body {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   padding: 14px 16px;
   scrollbar-width: thin;
@@ -819,7 +825,41 @@ body.light .status-bar {
   word-break: break-all;
 }
 
-/* Neighbor list */
+.detail-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-top: 1px solid var(--border);
+}
+
+#neighbors-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#neighbors-section .section-header {
+  flex-shrink: 0;
+  padding: 14px 16px 8px;
+}
+
+#neighbors-section .section-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 16px 14px;
+}
+
+.neighbor-list {
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-mid) transparent;
+}
+
+.neighbor-list::-webkit-scrollbar { width: 4px; }
+.neighbor-list::-webkit-scrollbar-thumb { background: var(--border-mid); border-radius: 2px; }
+
 .neighbor-item {
   display: flex;
   align-items: center;
